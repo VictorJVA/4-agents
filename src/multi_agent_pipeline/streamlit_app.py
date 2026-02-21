@@ -8,22 +8,24 @@ from multi_agent_pipeline.agents import (
     InceptionAgent,
     UserStoriesAgent,
     ERDesignAgent,
+    TestCasesAgent,
 )
-from multi_agent_pipeline.llm import GroqJSONClient
+from multi_agent_pipeline.llm import get_llm_client
 
 
-AGENT_ORDER = ["requirements", "inception", "user_stories", "er_design"]
+AGENT_ORDER = ["requirements", "inception", "user_stories", "test_cases", "er_design"]
 
 AGENT_LABELS = {
     "requirements": "1. Requirements Agent",
     "inception": "2. Inception Agent",
     "user_stories": "3. User Stories Agent",
-    "er_design": "4. ER Design Agent",
+    "test_cases": "4. Test Cases Agent",
+    "er_design": "5. ER Design Agent",
 }
 
 
 def run_single_agent(agent_name: str, state: dict):
-    llm = GroqJSONClient(model=state["model"])
+    llm = get_llm_client(provider=state.get("provider"), model=state.get("model") or None)
 
     if agent_name == "requirements":
         agent = RequirementsAgent(llm)
@@ -39,10 +41,24 @@ def run_single_agent(agent_name: str, state: dict):
         # payload = {**state["outputs"]["inception"], **state["outputs"]["requirements"]}
         payload = {"brief": state["brief"], "requirements": state["outputs"]["requirements"], "inception": state["outputs"]["inception"]}
 
+    elif agent_name == "test_cases":
+        agent = TestCasesAgent(llm)
+        payload = {
+            "brief": state["brief"],
+            "requirements": state["outputs"]["requirements"],
+            "inception": state["outputs"]["inception"],
+            "user_stories": state["outputs"]["user_stories"],
+        }
+
     elif agent_name == "er_design":
         agent = ERDesignAgent(llm)
-        # payload = {**state["outputs"]["user_stories"], **state["outputs"]["inception"], **state["outputs"]["requirements"]}
-        payload = {"brief": state["brief"], "requirements": state["outputs"]["requirements"], "inception": state["outputs"]["inception"], "user_stories": state["outputs"]["user_stories"]}
+        payload = {
+            "brief": state["brief"],
+            "requirements": state["outputs"]["requirements"],
+            "inception": state["outputs"]["inception"],
+            "user_stories": state["outputs"]["user_stories"],
+            "test_cases": state["outputs"]["test_cases"],
+        }
 
     else:
         return None
@@ -61,6 +77,7 @@ def main() -> None:
             "current_agent": None,
             "outputs": {},
             "brief": None,
+            "provider": None,
             "model": None,
             "running": False,
             "final": None,
@@ -73,7 +90,17 @@ def main() -> None:
             height=220,
             placeholder="Describe the product, users, goals, and constraints...",
         )
-        model = st.text_input("Model", value="llama-3.1-8b-instant")
+        provider = st.selectbox(
+            "Provider",
+            options=["gemini", "groq"],
+            format_func=lambda x: "Gemini" if x == "gemini" else "Groq",
+            index=0,
+        )
+        model = st.text_input(
+            "Model",
+            value="gemini-2.0-flash" if provider == "gemini" else "llama-3.1-8b-instant",
+            help="e.g. gemini-2.0-flash, gemini-1.5-pro (Gemini) or llama-3.1-8b-instant (Groq)",
+        )
         run_clicked = st.form_submit_button("Run Pipeline", type="primary")
 
     # ---- Start Pipeline ----
@@ -86,7 +113,8 @@ def main() -> None:
             "current_agent": "requirements",
             "outputs": {},
             "brief": brief_text.strip(),
-            "model": model.strip(),
+            "provider": provider,
+            "model": model.strip() or None,
             "running": True,
             "final": None,
         }
@@ -109,6 +137,16 @@ def main() -> None:
 
         output = state["outputs"][agent_name]
         st.json(output, expanded=True)
+
+        # ---- Previous agent output (logs) ----
+        idx = AGENT_ORDER.index(agent_name)
+        if idx > 0:
+            prev_agent = AGENT_ORDER[idx - 1]
+            prev_output = state["outputs"].get(prev_agent)
+            if prev_output is not None:
+                with st.expander("📋 Previous agent output (for approval context)", expanded=False):
+                    st.caption(f"Output from: {AGENT_LABELS[prev_agent]}")
+                    st.json(prev_output, expanded=False)
 
         col1, col2 = st.columns(2)
 

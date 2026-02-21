@@ -5,8 +5,8 @@ from typing import Any, Callable, Type, cast
 
 from pydantic import BaseModel, ValidationError
 
-from .llm import GroqJSONClient
-from .schemas import EROutput, InceptionOutput, RequirementsOutput, UserStoriesOutput
+from .llm import JSONLLMClient
+from .schemas import EROutput, InceptionOutput, RequirementsOutput, TestCasesOutput, UserStoriesOutput
 
 
 def _obj_list(value: Any) -> list[dict[str, Any]]:
@@ -136,8 +136,22 @@ def _normalize_er(raw: dict[str, Any]) -> dict[str, Any]:
     return data
 
 
+def _normalize_test_cases(raw: dict[str, Any]) -> dict[str, Any]:
+    data = dict(raw) if isinstance(raw, dict) else {}
+    data["test_summary"] = _str_scalar(data.get("test_summary"))
+    cases = _normalize_item_ids(_obj_list(data.get("test_cases")))
+    for case in cases:
+        case["user_story_id"] = _str_scalar(case.get("user_story_id"))
+        case["title"] = _str_scalar(case.get("title"))
+        case["scenario"] = _str_scalar(case.get("scenario"))
+        case["steps"] = _str_list(case.get("steps"))
+        case["expected_result"] = _str_scalar(case.get("expected_result"))
+    data["test_cases"] = cases
+    return data
+
+
 def _validate_with_repair(
-    llm: GroqJSONClient,
+    llm: JSONLLMClient,
     system_prompt: str,
     payload: dict[str, Any],
     model_type: Type[BaseModel],
@@ -163,7 +177,7 @@ def _validate_with_repair(
 
 @dataclass
 class RequirementsAgent:
-    llm: GroqJSONClient
+    llm: JSONLLMClient
 
     def run(self, payload: dict[str, Any]) -> RequirementsOutput:
         system_prompt = (
@@ -198,7 +212,7 @@ class RequirementsAgent:
 
 @dataclass
 class InceptionAgent:
-    llm: GroqJSONClient
+    llm: JSONLLMClient
 
     def run(self, payload: dict[str, Any]) -> InceptionOutput:
         system_prompt = (
@@ -222,7 +236,7 @@ class InceptionAgent:
 
 @dataclass
 class UserStoriesAgent:
-    llm: GroqJSONClient
+    llm: JSONLLMClient
 
     def run(self, payload: dict[str, Any]) -> UserStoriesOutput:
         system_prompt = (
@@ -247,7 +261,7 @@ class UserStoriesAgent:
 
 @dataclass
 class ERDesignAgent:
-    llm: GroqJSONClient
+    llm: JSONLLMClient
 
     def run(self, payload: dict[str, Any]) -> EROutput:
         system_prompt = (
@@ -268,3 +282,28 @@ class ERDesignAgent:
             normalize=_normalize_er,
         )
         return cast(EROutput, result)
+
+
+@dataclass
+class TestCasesAgent:
+    llm: JSONLLMClient
+
+    def run(self, payload: dict[str, Any]) -> TestCasesOutput:
+        system_prompt = (
+            "You are Agent 5 (Test Designer). "
+            "Input is JSON and output must be ONLY valid JSON. "
+            "Create test cases from user stories and acceptance criteria. "
+            "Each test case must map to a user story and be testable. "
+            "Output schema keys exactly: test_cases, test_summary. "
+            "test_cases item keys: id, user_story_id, title, scenario, steps, expected_result, priority, test_type. "
+            "priority allowed: critical|high|medium|low. "
+            "test_type allowed: unit|integration|e2e."
+        )
+        result = _validate_with_repair(
+            llm=self.llm,
+            system_prompt=system_prompt,
+            payload=payload,
+            model_type=TestCasesOutput,
+            normalize=_normalize_test_cases,
+        )
+        return cast(TestCasesOutput, result)

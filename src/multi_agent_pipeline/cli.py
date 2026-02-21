@@ -27,9 +27,15 @@ def _parse_args() -> argparse.Namespace:
         help="Where to write final artifacts JSON.",
     )
     parser.add_argument(
+        "--provider",
+        choices=["groq", "gemini"],
+        default=None,
+        help="LLM provider (default: gemini if GEMINI_API_KEY set, else groq).",
+    )
+    parser.add_argument(
         "--model",
-        default="llama-3.1-8b-instant",
-        help="Groq model name (default is free-tier friendly).",
+        default=None,
+        help="Model name (default: gemini-2.0-flash for Gemini, llama-3.1-8b-instant for Groq).",
     )
     return parser.parse_args()
 
@@ -63,6 +69,7 @@ def main() -> None:
 
     artifacts = run_pipeline(
         brief_text=brief_text,
+        provider=args.provider,
         model=args.model,
         on_agent_complete=_print_agent_output,
     )

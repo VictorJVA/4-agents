@@ -101,9 +101,26 @@ class EROutput(BaseModel):
     design_assumptions: list[str]
 
 
+class TestCaseItem(BaseModel):
+    id: str
+    user_story_id: str
+    title: str
+    scenario: str
+    steps: list[str]
+    expected_result: str
+    priority: Literal["critical", "high", "medium", "low"]
+    test_type: Literal["unit", "integration", "e2e"]
+
+
+class TestCasesOutput(BaseModel):
+    test_cases: list[TestCaseItem]
+    test_summary: str
+
+
 class FinalArtifactsPackage(BaseModel):
     initial_brief: InitialBriefInput
     requirements: RequirementsOutput
     inception: InceptionOutput
     user_stories: UserStoriesOutput
     er_design: EROutput
+    test_cases: TestCasesOutput
