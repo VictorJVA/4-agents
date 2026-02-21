@@ -1,0 +1,95 @@
+{
+  "project_name": "Plataforma Omnicanal",
+  "domain": "Retail Omnicanal",
+  "stakeholders": [
+    "Clientes finales",
+    "Agentes de contact center",
+    "Gerentes de tienda",
+    "Marketing digital",
+    "Logistica",
+    "Compliance"
+  ],
+  "business_goals": [
+    "Elevar conversion",
+    "Reducir devoluciones",
+    "Aumentar NPS",
+    "Bajar costo operativo",
+    "Acelerar lanzamiento de campanas"
+  ],
+  "functional_requirements": [
+    {
+      "id": "1",
+      "title": "Experiencia coherente de extremo a extremo",
+      "description": "Identidad única de cliente, carrito persistente entre canales y reglas de fulfillment dinámicas",
+      "priority": "high",
+      "rationale": "Mejorar la experiencia del cliente y aumentar la conversión"
+    },
+    {
+      "id": "2",
+      "title": "Reservar online y retirar en tienda",
+      "description": "Funcionalidad para reservar productos en línea y retirarlos en tienda",
+      "priority": "medium",
+      "rationale": "Mejorar la experiencia del cliente y aumentar la conversión"
+    },
+    {
+      "id": "3",
+      "title": "Devolución cruzada de canal",
+      "description": "Funcionalidad para devolver productos en diferentes canales (web, tienda, app)",
+      "priority": "medium",
+      "rationale": "Mejorar la experiencia del cliente y reducir devoluciones"
+    },
+    {
+      "id": "4",
+      "title": "Recomendación personalizada en app",
+      "description": "Funcionalidad para ofrecer recomendaciones personalizadas en la app",
+      "priority": "high",
+      "rationale": "Mejorar la experiencia del cliente y aumentar la conversión"
+    },
+    {
+      "id": "5",
+      "title": "Seguimiento proactivo de incidentes",
+      "description": "Funcionalidad para seguir y resolver incidentes de manera proactiva",
+      "priority": "high",
+      "rationale": "Mejorar la experiencia del cliente y aumentar la satisfacción"
+    }
+  ],
+  "non_functional_requirements": [
+    {
+      "id": "1",
+      "category": "Desempeño",
+      "requirement": "Tiempo de respuesta del soporte",
+      "measurable_target": "Menos de 2 horas"
+    },
+    {
+      "id": "2",
+      "category": "Seguridad",
+      "requirement": "Protección de datos personales",
+      "measurable_target": "Cumplimiento con la normativa de protección de datos"
+    },
+    {
+      "id": "3",
+      "category": "Disponibilidad",
+      "requirement": "Disponibilidad de la plataforma",
+      "measurable_target": "99,9% de disponibilidad"
+    },
+    {
+      "id": "4",
+      "category": "Escalabilidad",
+      "requirement": "Capacidad para manejar un aumento en la demanda",
+      "measurable_target": "Capacidad para manejar un aumento del 20% en la demanda"
+    }
+  ],
+  "constraints": [
+    "Limitaciones técnicas: integraciones punto a punto, datos duplicados, catalogos inconsistentes y ausencia de gobierno de datos",
+    "Restricciones regulatorias por protección de datos personales y trazabilidad de consentimiento en diferentes jurisdicciones"
+  ],
+  "assumptions": [
+    "Calidad de datos históricos",
+    "Dependencia de proveedores legacy",
+    "Resistencia al cambio en tiendas",
+    "Sobrecostos por integración"
+  ],
+  "open_questions": [
+    "functional_requirements: [{'id': 6, 'title': '¿Qué otras funcionalidades se deben incluir en la plataforma?', 'description': '', 'priority': '', 'rationale': ''}]"
+  ]
+}

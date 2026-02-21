@@ -1,0 +1,72 @@
+{
+  "epics": [
+    "{'id': '1', 'title': 'Experiencia coherente de extremo a extremo', 'description': 'Identidad unica de cliente, carrito persistente entre canales y reglas de fulfillment dinamicas', 'priority': 'must', 'acceptance_criteria': ['La plataforma debe permitir la creacion de una identidad unica de cliente', 'El carrito de compras debe ser persistente entre canales', 'Las reglas de fulfillment deben ser dinamicas y adaptarse a las necesidades del cliente']}",
+    "{'id': '2', 'title': 'Reservar online y retirar en tienda', 'description': 'Funcionalidad para reservar productos en linea y retirarlos en tienda', 'priority': 'should', 'acceptance_criteria': ['La plataforma debe permitir la reserva de productos en linea', 'La plataforma debe permitir la retirada de productos en tienda', 'La reserva debe ser sincronizada entre la plataforma en linea y la tienda']}",
+    "{'id': '3', 'title': 'Devolucion cruzada de canal', 'description': 'Funcionalidad para devolver productos en diferentes canales (web, tienda, app)', 'priority': 'could', 'acceptance_criteria': ['La plataforma debe permitir la devolucion de productos en diferentes canales', 'La plataforma debe sincronizar la devolucion entre los diferentes canales', 'La devolucion debe ser procesada de manera eficiente y sin errores']}",
+    "{'id': '4', 'title': 'Recomendacion personalizada en app', 'description': 'Funcionalidad para ofrecer recomendaciones personalizadas en la app', 'priority': 'must', 'acceptance_criteria': ['La plataforma debe ofrecer recomendaciones personalizadas en la app', 'Las recomendaciones deben ser basadas en los habitos y preferencias del cliente']}",
+    "{'id': '5', 'title': 'Seguimiento proactivo de incidentes', 'description': 'Funcionalidad para seguir y resolver incidentes de manera proactiva', 'priority': 'should', 'acceptance_criteria': ['La plataforma debe detectar incidentes en tiempo real', 'La plataforma debe notificar a los clientes sobre los incidentes']}"
+  ],
+  "user_stories": [
+    {
+      "id": "1",
+      "epic": "1",
+      "as_a": "Un cliente",
+      "i_want": "que la plataforma me permita crear una identidad unica",
+      "so_that": "pueda tener una experiencia coherente en todos los canales",
+      "priority": "must",
+      "acceptance_criteria": [
+        "La plataforma debe permitir la creacion de una identidad unica de cliente",
+        "La identidad unica debe ser sincronizada entre los diferentes canales"
+      ]
+    },
+    {
+      "id": "2",
+      "epic": "2",
+      "as_a": "Un cliente",
+      "i_want": "que la plataforma me permita reservar productos en linea",
+      "so_that": "pueda retirarlos en tienda de manera facil y eficiente",
+      "priority": "should",
+      "acceptance_criteria": [
+        "La plataforma debe permitir la reserva de productos en linea",
+        "La reserva debe ser sincronizada entre la plataforma en linea y la tienda"
+      ]
+    },
+    {
+      "id": "3",
+      "epic": "3",
+      "as_a": "Un cliente",
+      "i_want": "que la plataforma me permita devolver productos en diferentes canales",
+      "so_that": "pueda devolverlos de manera facil y eficiente",
+      "priority": "could",
+      "acceptance_criteria": [
+        "La plataforma debe permitir la devolucion de productos en diferentes canales",
+        "La devolucion debe ser sincronizada entre los diferentes canales"
+      ]
+    },
+    {
+      "id": "4",
+      "epic": "4",
+      "as_a": "Un cliente",
+      "i_want": "que la plataforma me ofrezca recomendaciones personalizadas en la app",
+      "so_that": "pueda tener una experiencia personalizada y relevante",
+      "priority": "must",
+      "acceptance_criteria": [
+        "La plataforma debe ofrecer recomendaciones personalizadas en la app",
+        "Las recomendaciones deben ser basadas en los habitos y preferencias del cliente"
+      ]
+    },
+    {
+      "id": "5",
+      "epic": "5",
+      "as_a": "Un cliente",
+      "i_want": "que la plataforma me permita seguir y resolver incidentes de manera proactiva",
+      "so_that": "pueda tener una experiencia segura y confiable",
+      "priority": "should",
+      "acceptance_criteria": [
+        "La plataforma debe detectar incidentes en tiempo real",
+        "La plataforma debe notificar a los clientes sobre los incidentes"
+      ]
+    }
+  ],
+  "dependencies": []
+}

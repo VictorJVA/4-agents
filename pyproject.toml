@@ -1,0 +1,25 @@
+[project]
+name = "multi-agent-se-artifacts"
+version = "0.1.0"
+description = "4-agent software engineering artifact pipeline powered by Groq"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "groq>=0.18.0",
+  "pydantic>=2.7.0",
+  "python-dotenv>=1.0.0",
+  "streamlit>=1.32.0",
+]
+
+[project.scripts]
+se-pipeline = "multi_agent_pipeline.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

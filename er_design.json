@@ -1,0 +1,155 @@
+{
+  "entities": [
+    {
+      "name": "Cliente",
+      "description": "Representa a un cliente de la empresa de retail omnicanal",
+      "attributes": [
+        {
+          "name": "id_cliente",
+          "data_type": "int",
+          "is_primary_key": true,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": true,
+          "description": "Identificador unico del cliente"
+        },
+        {
+          "name": "nombre",
+          "data_type": "varchar",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Nombre del cliente"
+        },
+        {
+          "name": "email",
+          "data_type": "varchar",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": true,
+          "description": "Correo electronico del cliente"
+        },
+        {
+          "name": "direccion",
+          "data_type": "varchar",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Direccion del cliente"
+        }
+      ],
+      "relationships": [
+        {
+          "to_entity": "Pedido",
+          "cardinality": "1:N",
+          "description": "Un cliente puede realizar varios pedidos",
+          "foreign_key": "id_cliente"
+        }
+      ]
+    },
+    {
+      "name": "Pedido",
+      "description": "Representa a un pedido realizado por un cliente",
+      "attributes": [
+        {
+          "name": "id_pedido",
+          "data_type": "int",
+          "is_primary_key": true,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": true,
+          "description": "Identificador unico del pedido"
+        },
+        {
+          "name": "id_cliente",
+          "data_type": "int",
+          "is_primary_key": false,
+          "is_foreign_key": true,
+          "nullable": false,
+          "unique": false,
+          "description": "Identificador del cliente que realizo el pedido"
+        },
+        {
+          "name": "fecha_realizacion",
+          "data_type": "date",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Fecha en que se realizo el pedido"
+        },
+        {
+          "name": "total",
+          "data_type": "decimal",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Total del pedido"
+        }
+      ],
+      "relationships": [
+        {
+          "to_entity": "Producto",
+          "cardinality": "N:M",
+          "description": "Un pedido puede contener varios productos y un producto puede estar en varios pedidos",
+          "foreign_key": "id_pedido"
+        }
+      ]
+    },
+    {
+      "name": "Producto",
+      "description": "Representa a un producto que se puede comprar",
+      "attributes": [
+        {
+          "name": "id_producto",
+          "data_type": "int",
+          "is_primary_key": true,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": true,
+          "description": "Identificador unico del producto"
+        },
+        {
+          "name": "nombre",
+          "data_type": "varchar",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Nombre del producto"
+        },
+        {
+          "name": "precio",
+          "data_type": "decimal",
+          "is_primary_key": false,
+          "is_foreign_key": false,
+          "nullable": false,
+          "unique": false,
+          "description": "Precio del producto"
+        }
+      ],
+      "relationships": [
+        {
+          "to_entity": "Pedido",
+          "cardinality": "N:M",
+          "description": "Un producto puede estar en varios pedidos y un pedido puede contener varios productos",
+          "foreign_key": "id_producto"
+        }
+      ]
+    }
+  ],
+  "normalization_notes": [
+    "La entidad Cliente tiene una clave primaria compuesta por el atributo id_cliente",
+    "La entidad Pedido tiene una clave primaria compuesta por el atributo id_pedido",
+    "La entidad Producto tiene una clave primaria compuesta por el atributo id_producto"
+  ],
+  "design_assumptions": [
+    "Se asume que cada cliente puede realizar varios pedidos",
+    "Se asume que cada pedido puede contener varios productos",
+    "Se asume que cada producto puede estar en varios pedidos"
+  ]
+}

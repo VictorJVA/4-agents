@@ -1,0 +1,51 @@
+{
+  "product_summary": "Plataforma Omnicanal para mejorar la experiencia del cliente y aumentar la conversión en una empresa de retail omnicanal",
+  "problem_statement": "La empresa de retail omnicanal enfrenta problemas de integraciones punto a punto, datos duplicados, catalogos inconsistentes y ausencia de gobierno de datos, lo que afecta la experiencia del cliente y la conversión",
+  "value_proposition": "La plataforma omnicanal ofrece una experiencia coherente de extremo a extremo, reservar online y retirar en tienda, devolución cruzada de canal, recomendación personalizada en app y seguimiento proactivo de incidentes, lo que mejora la experiencia del cliente y aumenta la conversión",
+  "mvp_in_scope": [
+    "{'id': 1, 'description': 'Experiencia coherente de extremo a extremo', 'priority': 'high', 'rationale': 'Mejorar la experiencia del cliente y aumentar la conversión'}",
+    "{'id': 2, 'description': 'Reservar online y retirar en tienda', 'priority': 'medium', 'rationale': 'Mejorar la experiencia del cliente y aumentar la conversión'}",
+    "{'id': 3, 'description': 'Devolución cruzada de canal', 'priority': 'medium', 'rationale': 'Mejorar la experiencia del cliente y reducir devoluciones'}"
+  ],
+  "mvp_out_of_scope": [
+    "{'id': 4, 'description': 'Recomendación personalizada en app', 'priority': 'high', 'rationale': 'Mejorar la experiencia del cliente y aumentar la conversión'}",
+    "{'id': 5, 'description': 'Seguimiento proactivo de incidentes', 'priority': 'high', 'rationale': 'Mejorar la experiencia del cliente y aumentar la satisfacción'}"
+  ],
+  "risks": [
+    {
+      "id": "1",
+      "description": "Calidad de datos históricos",
+      "impact": "high",
+      "probability": "medium",
+      "mitigation": "Revisar y mejorar la calidad de los datos históricos"
+    },
+    {
+      "id": "2",
+      "description": "Dependencia de proveedores legacy",
+      "impact": "high",
+      "probability": "medium",
+      "mitigation": "Desarrollar una estrategia para reducir la dependencia de proveedores legacy"
+    },
+    {
+      "id": "3",
+      "description": "Resistencia al cambio en tiendas",
+      "impact": "medium",
+      "probability": "high",
+      "mitigation": "Desarrollar una estrategia para reducir la resistencia al cambio en tiendas"
+    },
+    {
+      "id": "4",
+      "description": "Sobrecostos por integración",
+      "impact": "medium",
+      "probability": "high",
+      "mitigation": "Desarrollar una estrategia para reducir los sobrecostos por integración"
+    }
+  ],
+  "success_metrics": [
+    "{'id': 1, 'description': 'Conversion', 'target': 'Aumentar la conversión en un 20%'}",
+    "{'id': 2, 'description': 'Cumplimiento de promesa de entrega', 'target': 'Cumplir con la promesa de entrega en un 95%'}",
+    "{'id': 3, 'description': 'Tasa de recompra', 'target': 'Aumentar la tasa de recompra en un 15%'}",
+    "{'id': 4, 'description': 'Tiempo medio de resolución de casos', 'target': 'Reducir el tiempo medio de resolución de casos en un 30%'}"
+  ],
+  "release_strategy": "Lanzar la plataforma omnicanal en fases, comenzando con la experiencia coherente de extremo a extremo y reservar online y retirar en tienda"
+}
