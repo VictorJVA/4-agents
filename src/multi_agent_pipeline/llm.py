@@ -61,7 +61,7 @@ class GeminiJSONClient:
 
     def __init__(
         self,
-        model: str = "gemini-2.0-flash",
+        model: str = "gemini-3-flash-preview",
         *,
         _genai: Any = None,
         _types: Any = None,
