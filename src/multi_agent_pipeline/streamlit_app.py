@@ -138,15 +138,17 @@ def main() -> None:
         output = state["outputs"][agent_name]
         st.json(output, expanded=True)
 
-        # ---- Previous agent output (logs) ----
+        # ---- All previous agents' outputs (logs) ----
         idx = AGENT_ORDER.index(agent_name)
-        if idx > 0:
-            prev_agent = AGENT_ORDER[idx - 1]
-            prev_output = state["outputs"].get(prev_agent)
-            if prev_output is not None:
-                with st.expander("📋 Previous agent output (for approval context)", expanded=False):
-                    st.caption(f"Output from: {AGENT_LABELS[prev_agent]}")
-                    st.json(prev_output, expanded=False)
+        previous_agents = AGENT_ORDER[:idx]
+        if previous_agents:
+            with st.expander("📋 All previous agent outputs (for approval context)", expanded=False):
+                for prev_agent in previous_agents:
+                    prev_output = state["outputs"].get(prev_agent)
+                    if prev_output is not None:
+                        st.caption(f"**{AGENT_LABELS[prev_agent]}**")
+                        st.json(prev_output, expanded=False)
+                        st.divider()
 
         col1, col2 = st.columns(2)
 
