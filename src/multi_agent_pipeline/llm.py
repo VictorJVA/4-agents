@@ -2,13 +2,35 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Callable, TypeVar, Protocol
 
 from dotenv import load_dotenv
 from groq import Groq
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+
+DEFAULT_MAX_RETRIES = 4
+DEFAULT_RETRY_DELAY_SECONDS = 5
+
+T = TypeVar("T")
+
+
+def _with_retry(
+    fn: Callable[[], T],
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    delay_seconds: float = DEFAULT_RETRY_DELAY_SECONDS,
+) -> T:
+    last_error: BaseException | None = None
+    for attempt in range(max_retries + 1):
+        try:
+            return fn()
+        except Exception as e:
+            last_error = e
+            if attempt < max_retries:
+                time.sleep(delay_seconds)
+    raise last_error
 
 
 class JSONLLMClient(Protocol):
@@ -26,22 +48,25 @@ class GroqJSONClient:
         self.model = model
 
     def complete_json(self, system_prompt: str, user_payload: dict[str, Any]) -> dict[str, Any]:
-        completion = self.client.chat.completions.create(
-            model=self.model,
-            temperature=0.2,
-            response_format={"type": "json_object"},
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {
-                    "role": "user",
-                    "content": json.dumps(user_payload, ensure_ascii=True),
-                },
-            ],
-        )
-        content = completion.choices[0].message.content
-        if not content:
-            raise RuntimeError("Empty model response")
-        return json.loads(content)
+        def _call() -> dict[str, Any]:
+            completion = self.client.chat.completions.create(
+                model=self.model,
+                temperature=0.2,
+                response_format={"type": "json_object"},
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {
+                        "role": "user",
+                        "content": json.dumps(user_payload, ensure_ascii=True),
+                    },
+                ],
+            )
+            content = completion.choices[0].message.content
+            if not content:
+                raise RuntimeError("Empty model response")
+            return json.loads(content)
+
+        return _with_retry(_call)
 
 
 def _get_gemini_client(model: str) -> "GeminiJSONClient":
@@ -85,19 +110,24 @@ class GeminiJSONClient:
         self.model = model
 
     def complete_json(self, system_prompt: str, user_payload: dict[str, Any]) -> dict[str, Any]:
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=json.dumps(user_payload, ensure_ascii=True),
-            config=self._types.GenerateContentConfig(
-                system_instruction=system_prompt,
-                response_mime_type="application/json",
-                temperature=0.2,
-            ),
-        )
-        text = getattr(response, "text", None) or (response.candidates[0].content.parts[0].text if response.candidates else None)
-        if not text:
-            raise RuntimeError("Empty model response")
-        return json.loads(text)
+        def _call() -> dict[str, Any]:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=json.dumps(user_payload, ensure_ascii=True),
+                config=self._types.GenerateContentConfig(
+                    system_instruction=system_prompt,
+                    response_mime_type="application/json",
+                    temperature=0.2,
+                ),
+            )
+            text = getattr(response, "text", None) or (
+                response.candidates[0].content.parts[0].text if response.candidates else None
+            )
+            if not text:
+                raise RuntimeError("Empty model response")
+            return json.loads(text)
+
+        return _with_retry(_call)
 
 
 def get_llm_client(
